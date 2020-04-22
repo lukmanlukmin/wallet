@@ -3,6 +3,7 @@ package db
 import (
 	"fmt"
 	"os"
+	"strconv"
 	"time"
 
 	"github.com/go-sql-driver/mysql"
@@ -35,9 +36,21 @@ func DBInit() (*gorm.DB, error) {
 	}
 
 	fmt.Println(fmt.Sprintf("Successfully connected to database %s", mysqlCon))
-	DB.DB().SetConnMaxLifetime(os.Getenv("DB_MYSQL_CONNECTION_LIFETIME_MINUTE") * time.Minute)
-	DB.DB().SetMaxIdleConns(os.Getenv("DB_MYSQL_MAX_IDLE_CONNECTION_COUNT"))
-	DB.DB().SetMaxOpenConns(os.Getenv("DB_MYSQL_MAX_OPEN_CONNECTION_COUNT"))
+	maxConLifeTime, err := strconv.Atoi(os.Getenv("DB_MYSQL_CONNECTION_LIFETIME_MINUTE"))
+	if err == nil {
+		fmt.Println("COnfiguration DB Failed")
+	}
+	maxIdleCount, err := strconv.Atoi(os.Getenv("DB_MYSQL_CONNECTION_LIFETIME_MINUTE"))
+	if err == nil {
+		fmt.Println("COnfiguration DB Failed")
+	}
+	maxOpenConCount, err := strconv.Atoi(os.Getenv("DB_MYSQL_CONNECTION_LIFETIME_MINUTE"))
+	if err == nil {
+		fmt.Println("COnfiguration DB Failed")
+	}
+	DB.DB().SetConnMaxLifetime(time.Duration(maxConLifeTime) * time.Minute)
+	DB.DB().SetMaxIdleConns(maxIdleCount)
+	DB.DB().SetMaxOpenConns(maxOpenConCount)
 	DB.LogMode(true)
 
 	log, err := zap.NewProduction()

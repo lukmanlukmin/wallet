@@ -1,11 +1,12 @@
 package main
 
 import (
-	"config"
-	"controller"
 	"fmt"
 	"log"
 	"os"
+
+	"github.com/lukmanlukmin/wallet/config"
+	"github.com/lukmanlukmin/wallet/controller"
 
 	"github.com/joho/godotenv"
 )
