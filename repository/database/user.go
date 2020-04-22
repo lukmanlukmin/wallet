@@ -1,11 +1,9 @@
 package database
 
 import (
-	"sync"
-
 	"github.com/jinzhu/gorm"
 	dbEntity "github.com/lukmanlukmin/wallet/entity/database"
-	connection "github.com/lukmanlukmin/wallet/util/helper/mysqlconnection"
+	connection "github.com/lukmanlukmin/wallet/util/connection"
 )
 
 type UserRepository struct {
@@ -17,21 +15,21 @@ func UserRepositoryHandler() *UserRepository {
 }
 
 type UserRepositoryInterface interface {
-	GetUserByID(id int, userData *dbEntity.User, wg *sync.WaitGroup) error
+	GetUserByID(id int, userData *dbEntity.User) error
+	GetUserByEmailPassword(email string, password string, userData *dbEntity.User) error
 }
 
-func (repository *UserRepository) GetUserByID(id int, userData *dbEntity.User, wg *sync.WaitGroup) error {
-	query := repository.DB.Preload("UserStatus")
+func (repository *UserRepository) GetUserByID(id int, userData *dbEntity.User) error {
+	query := repository.DB.Table("users")
 	query = query.Where("id=?", id)
 	query = query.First(userData)
-	wg.Done()
 	return query.Error
 }
 
-func (repository *UserRepository) GetUserByEmailPassword(email string, password string, userData *dbEntity.User, wg *sync.WaitGroup) error {
+func (repository *UserRepository) GetUserByEmailPassword(email string, password string, userData *dbEntity.User) error {
 	query := repository.DB.Preload("UserStatus")
-	query = query.Where("email=? AND password=?", email, password)
+	query = query.Where("email=?", email)
+	query = query.Where("password=?", password)
 	query = query.First(userData)
-	wg.Done()
 	return query.Error
 }
