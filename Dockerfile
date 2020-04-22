@@ -27,7 +27,11 @@ ENV GO111MODULE=on
 # RUN dep ensure -v
 
 RUN ls -la
-RUN go mod init github.com/lukmanlukmin/wallet
+# use if it first time to register go module
+# RUN go mod init github.com/lukmanlukmin/wallet
+
+# install migrate-cli
+RUN go get -tags 'postgres' -u github.com/golang-migrate/migrate/v4/cmd/migrate/
 # we run go build to compile the binary
 # executable of our Go program
 # RUN go build -o main .

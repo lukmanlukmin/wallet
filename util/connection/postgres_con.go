@@ -20,33 +20,34 @@ func init() {
 
 func DBInit() (*gorm.DB, error) {
 
-	mysqlCon := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8&parseTime=True",
-		os.Getenv("DB_MYSQL_USERNAME"),
-		os.Getenv("DB_MYSQL_PASSWORD"),
-		os.Getenv("DB_MYSQL_HOST"),
+	// dbCon := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8&parseTime=True",
+	dbCon := fmt.Sprintf("host=%s port=%s user=%s dbname=%s password=%s",
+		os.Getenv("DB_HOST"),
+		os.Getenv("POSTGRES_PASSWORD"),
+		os.Getenv("DB_HOST"),
 		os.Getenv("DB_MYSQL_PORT"),
 		os.Getenv("DB_MYSQL_DATABASE"),
 	)
 	var err error
-	DB, err = gorm.Open("mysql", mysqlCon)
+	DB, err = gorm.Open("postgres", dbCon)
 
 	if err != nil {
-		fmt.Println(fmt.Sprintf("Failed connected to database %s", mysqlCon))
+		fmt.Println(fmt.Sprintf("Failed connected to database %s", dbCon))
 		return DB, err
 	}
 
-	fmt.Println(fmt.Sprintf("Successfully connected to database %s", mysqlCon))
-	maxConLifeTime, err := strconv.Atoi(os.Getenv("DB_MYSQL_CONNECTION_LIFETIME_MINUTE"))
+	fmt.Println(fmt.Sprintf("Successfully connected to database %s", dbCon))
+	maxConLifeTime, err := strconv.Atoi(os.Getenv("DB_CONNECTION_LIFETIME_MINUTE"))
 	if err == nil {
-		fmt.Println("COnfiguration DB Failed")
+		fmt.Println("Configuration DB Failed")
 	}
-	maxIdleCount, err := strconv.Atoi(os.Getenv("DB_MYSQL_CONNECTION_LIFETIME_MINUTE"))
+	maxIdleCount, err := strconv.Atoi(os.Getenv("DB_CONNECTION_LIFETIME_MINUTE"))
 	if err == nil {
-		fmt.Println("COnfiguration DB Failed")
+		fmt.Println("Configuration DB Failed")
 	}
-	maxOpenConCount, err := strconv.Atoi(os.Getenv("DB_MYSQL_CONNECTION_LIFETIME_MINUTE"))
+	maxOpenConCount, err := strconv.Atoi(os.Getenv("DB_CONNECTION_LIFETIME_MINUTE"))
 	if err == nil {
-		fmt.Println("COnfiguration DB Failed")
+		fmt.Println("Configuration DB Failed")
 	}
 	DB.DB().SetConnMaxLifetime(time.Duration(maxConLifeTime) * time.Minute)
 	DB.DB().SetMaxIdleConns(maxIdleCount)
