@@ -1,4 +1,4 @@
-FROM golang:1.12-alpine
+FROM golang:1.14-alpine
 
 RUN apk update && \
     apk upgrade && \
@@ -11,20 +11,27 @@ RUN apk update && \
 # We create an /app directory within our
 # image that will hold our application source
 # files
-RUN mkdir /go/src/wallet
+RUN mkdir -p /home/go/src/wallet
 # We copy everything in the root directory
 # into our /app directory
-COPY . /go/src/wallet
+COPY . /home/go/src/wallet
 # We specify that we now wish to execute 
 # any further commands inside our /app
 # directory
-WORKDIR /go/src/wallet
-# change directory to our working directory
-RUN cd /go/src/wallet
+WORKDIR /home/go/src/wallet
+
+ENV GO111MODULE=on
 # add project maintainer
-RUN go get -u github.com/golang/dep/cmd/dep
+# RUN go get -u github.com/golang/dep/cmd/dep
 # RUN dep init
-# RUN dep ensure
+# RUN dep ensure -v
+
+RUN ls -la
+# use if it first time to register go module
+# RUN go mod init github.com/lukmanlukmin/wallet
+
+# install migrate-cli
+RUN go get -tags 'postgres' -u github.com/golang-migrate/migrate/v4/cmd/migrate/
 # we run go build to compile the binary
 # executable of our Go program
 # RUN go build -o main .

@@ -1,12 +1,10 @@
 package config
 
 import (
-	"wallet/util/middleware"
-
 	"github.com/gin-gonic/gin"
+	"github.com/lukmanlukmin/wallet/util/middleware"
 )
 
-// default server router configuration
 func SetupRouter() *gin.Engine {
 	defaultMiddleware := middleware.DefaultMiddleware{}
 	router := gin.Default()

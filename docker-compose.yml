@@ -1,19 +1,5 @@
-version: '3.0'
+version: '3.3'
 services:
-  wallet-db:
-    restart: always
-    build:
-      context: .
-      dockerfile: Dockerfile-mysql
-    container_name: mini_ewallet_db
-    environment:
-      MYSQL_ROOT_PASSWORD: 'toor'
-      MYSQL_USER: 'user_wallet'
-      MYSQL_PASS: 'password_wallet'
-    # volumes:
-    #   - ./data/mysql:/var/lib/mysql
-    ports:
-      - 3301:3306
   wallet-api:
     build:
       context: .
@@ -22,5 +8,26 @@ services:
     ports:
       - 8080:3000
     volumes:
-      - '.:/go/src/wallet:rw'
+      - '.:/home/go/src/wallet:rw'
+    networks:
+      wallet_network:
+        ipv4_address: 174.21.210.10
     tty: true
+  database:
+    image: postgres
+    env_file:
+      - .env
+    ports:
+    - 5432:5432
+    networks:
+      wallet_network:
+        ipv4_address: 174.21.210.11
+networks:
+  wallet_network:
+    driver: bridge
+    driver_opts:
+      com.docker.network.enable_ipv6: 'false'
+    ipam:
+      driver: default
+      config:
+      - subnet: 174.21.210.0/24
