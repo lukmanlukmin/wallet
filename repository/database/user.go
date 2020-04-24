@@ -18,8 +18,10 @@ type UserRepositoryInterface interface {
 	GetUserByID(id int, userData *dbEntity.User) error
 	GetUserByEmail(email string, userData *dbEntity.User) error
 	GetUserByEmailPassword(email string, password string, userData *dbEntity.User) error
+	GetUserList(limit int, offset int) ([]dbEntity.User, error)
 	InsertUser(userData *dbEntity.User) error
 	UpdateUser(id int, userData *dbEntity.User) error
+	DeleteUser(id int) error
 }
 
 func (repository *UserRepository) GetUserByEmail(email string, userData *dbEntity.User) error {
@@ -43,6 +45,13 @@ func (repository *UserRepository) GetUserByEmailPassword(email string, password 
 	query = query.First(userData)
 	return query.Error
 }
+func (repository *UserRepository) GetUserList(limit int, offset int) ([]dbEntity.User, error) {
+	users := []dbEntity.User{}
+	query := repository.DB.Table("users")
+	query = query.Limit(limit).Offset(offset)
+	query = query.Find(&users)
+	return users, query.Error
+}
 
 func (repository *UserRepository) InsertUser(userData *dbEntity.User) error {
 	query := repository.DB.Table("users")
@@ -54,5 +63,12 @@ func (repository *UserRepository) UpdateUser(id int, userData *dbEntity.User) er
 	query := repository.DB.Table("users")
 	query = query.Where("id=?", id)
 	query = query.Updates(userData)
+	return query.Error
+}
+
+func (repository *UserRepository) DeleteUser(id int) error {
+	query := repository.DB.Table("users")
+	query = query.Where("id=?", id)
+	query = query.Delete(&dbEntity.User{})
 	return query.Error
 }

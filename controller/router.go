@@ -74,8 +74,13 @@ func (rLoader *RouterLoader) UserRouterDefinition(router *gin.Engine, handler *U
 	{
 		userGroup.POST("", handler.CreateUser)
 		userGroup.GET(":id", handler.GetUserByID)
-		userGroup.PUT(":id", handler.GetUserByID)
-		userGroup.DELETE(":id", handler.GetUserByID)
+		userGroup.PUT(":id", handler.UpdateUserByID)
+		userGroup.DELETE(":id", handler.DeleteUserByID)
 	}
 
+	usersGroup := router.Group("users")
+	usersGroup.Use(midleware.JWTAuthMidlewareAdmin())
+	{
+		usersGroup.GET("", handler.GetUsers)
+	}
 }
