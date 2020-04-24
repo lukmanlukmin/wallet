@@ -6,3 +6,9 @@ type UserRequest struct {
 	Password string `json:"password"`
 	UserType string `json:"user_type"`
 }
+
+type UpdateUserRequest struct {
+	Username string `json:"username"`
+	Email    string `json:"email"`
+	Password string `json:"password"`
+}
