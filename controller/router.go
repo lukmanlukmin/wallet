@@ -3,6 +3,7 @@ package controller
 import (
 	"github.com/gin-gonic/gin"
 	authService "github.com/lukmanlukmin/wallet/service/auth"
+	transactionService "github.com/lukmanlukmin/wallet/service/transaction"
 	userService "github.com/lukmanlukmin/wallet/service/user"
 	authMidleware "github.com/lukmanlukmin/wallet/util/middleware"
 )
@@ -14,6 +15,7 @@ func LoadRouter(routers *gin.Engine) {
 	router := &RouterLoader{}
 	router.AuthRouter(routers)
 	router.UserRouter(routers)
+	router.TransactionRouter(routers)
 }
 
 func (rLoader *RouterLoader) AuthRouter(router *gin.Engine) {
@@ -32,7 +34,23 @@ func (rLoader *RouterLoader) AuthRouterDefinition(router *gin.Engine, handler *A
 	{
 		authGroup.GET("logout", handler.Logout)
 	}
+}
 
+func (rLoader *RouterLoader) TransactionRouter(router *gin.Engine) {
+	handler := &TransactionController{
+		TransactionService: transactionService.TransactionServiceHandler(),
+	}
+	rLoader.TransactionRouterDefinition(router, handler)
+}
+
+func (rLoader *RouterLoader) TransactionRouterDefinition(router *gin.Engine, handler *TransactionController) {
+	transactionGroup := router.Group("transaction")
+	midleware := authMidleware.DefaultMiddleware{}
+	transactionGroup.Use(midleware.JWTAuthMidlewareGuest())
+	{
+		transactionGroup.POST("topup", handler.TopUp)
+		transactionGroup.POST("transfer", handler.Transfer)
+	}
 }
 
 func (rLoader *RouterLoader) UserRouter(router *gin.Engine) {
