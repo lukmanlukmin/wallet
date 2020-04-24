@@ -3,8 +3,7 @@
 
 **Stack Information**  
 *1. Database & Migration* : Using postgreSQL and Attached migration data. use mail name as password to login.<br>
-*2. Separation Concern* : Using go-module but with MVC design pattern, no additional/custom module attached
-remaining readable, extensible and testable.<br>
+*2. Separation Concern* : Using go-module but with MVC design pattern, no additional/custom module attached<br>
 *3. Test Coverage* : Still below 50% because limitation of working time.<br>
 *4. Project Delivery* : Using docker as one place delivery container.<br>
 
