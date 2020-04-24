@@ -1,8 +1,8 @@
 
 # BE PRETEST DCI (Mini e-wallet)
 
-__Asumption__<br>
-[task & issue](https://www.evernote.com/shard/s355/client/snv?noteGuid=3ce40a4f-d15f-4f35-b4f8-9cfe6c0cc0ec&noteKey=c73db594218f81a5c5ea32b02274461b&sn=https%3A%2F%2Fwww.evernote.com%2Fshard%2Fs355%2Fsh%2F3ce40a4f-d15f-4f35-b4f8-9cfe6c0cc0ec%2Fc73db594218f81a5c5ea32b02274461b&title=BE%2BPRETEST%2BDCI%2B%2528Mini%2Be-wallet%2529)
+__Result and Asumption__<br>
+[task & issue](https://www.evernote.com/shard/s355/client/snv?noteGuid=3ce40a4f-d15f-4f35-b4f8-9cfe6c0cc0ec&noteKey=c73db594218f81a5c5ea32b02274461b&sn=https%3A%2F%2Fwww.evernote.com%2Fshard%2Fs355%2Fsh%2F3ce40a4f-d15f-4f35-b4f8-9cfe6c0cc0ec%2Fc73db594218f81a5c5ea32b02274461b&title=BE%2BPRETEST%2BDCI%2B%2528Mini%2Be-wallet%2529)<br>
 please read this [document](https://github.com/lukmanlukmin/wallet/blob/master/assumption.md) for additional assumption
 
 __Introduction__<br>
