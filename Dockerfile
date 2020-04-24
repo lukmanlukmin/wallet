@@ -8,12 +8,12 @@ RUN apk update && \
     apk add curl && \
     apk add --update make
 
-# We create an /app directory within our
+# We create an app directory within our
 # image that will hold our application source
 # files
 RUN mkdir -p /home/go/src/wallet
 # We copy everything in the root directory
-# into our /app directory
+# into our app directory
 COPY . /home/go/src/wallet
 # We specify that we now wish to execute 
 # any further commands inside our /app
@@ -21,20 +21,18 @@ COPY . /home/go/src/wallet
 WORKDIR /home/go/src/wallet
 
 ENV GO111MODULE=on
-# add project maintainer
-# RUN go get -u github.com/golang/dep/cmd/dep
-# RUN dep init
-# RUN dep ensure -v
 
-RUN ls -la
 # use if it first time to register go module
 # RUN go mod init github.com/lukmanlukmin/wallet
 
 # install migrate-cli
 RUN go get -tags 'postgres' -u github.com/golang-migrate/migrate/v4/cmd/migrate/
-# we run go build to compile the binary
-# executable of our Go program
+
+# run migration 
+RUN migrate -verbose -source file://migration/postgresql -database postgres:'//wallet_user:wallet_password@174.21.210.11:5432/wallet_db?sslmode=disable' up
+
+# build app to binary
 # RUN go build -o main .
-# Our start command which kicks off
-# our newly created binary executable
-# CMD ["make","run"]
+
+# RUN app on development mode
+RUN go run main.go
