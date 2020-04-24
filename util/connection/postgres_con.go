@@ -8,6 +8,7 @@ import (
 
 	"github.com/go-sql-driver/mysql"
 	"github.com/jinzhu/gorm"
+	_ "github.com/jinzhu/gorm/dialects/postgres"
 	"github.com/joho/godotenv"
 	"go.uber.org/zap"
 )
@@ -21,33 +22,35 @@ func init() {
 func DBInit() (*gorm.DB, error) {
 
 	// dbCon := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8&parseTime=True",
-	dbCon := fmt.Sprintf("host=%s port=%s user=%s dbname=%s password=%s",
+	dbCon := fmt.Sprintf("host=%s port=%s user=%s dbname=%s password=%s sslmode=disable",
 		os.Getenv("DB_HOST"),
+		os.Getenv("DB_PORT"),
+		os.Getenv("POSTGRES_USER"),
+		os.Getenv("POSTGRES_DB"),
 		os.Getenv("POSTGRES_PASSWORD"),
-		os.Getenv("DB_HOST"),
-		os.Getenv("DB_MYSQL_PORT"),
-		os.Getenv("DB_MYSQL_DATABASE"),
 	)
+	fmt.Println(dbCon)
 	var err error
 	DB, err = gorm.Open("postgres", dbCon)
 
 	if err != nil {
 		fmt.Println(fmt.Sprintf("Failed connected to database %s", dbCon))
+		fmt.Println(err)
 		return DB, err
 	}
 
 	fmt.Println(fmt.Sprintf("Successfully connected to database %s", dbCon))
 	maxConLifeTime, err := strconv.Atoi(os.Getenv("DB_CONNECTION_LIFETIME_MINUTE"))
-	if err == nil {
-		fmt.Println("Configuration DB Failed")
+	if err != nil {
+		fmt.Println("DB_CONNECTION_LIFETIME_MINUTE Failed")
 	}
-	maxIdleCount, err := strconv.Atoi(os.Getenv("DB_CONNECTION_LIFETIME_MINUTE"))
-	if err == nil {
-		fmt.Println("Configuration DB Failed")
+	maxIdleCount, err := strconv.Atoi(os.Getenv("DB_MAX_IDLE_CONNECTION_COUNT"))
+	if err != nil {
+		fmt.Println("DB_MAX_IDLE_CONNECTION_COUNT Failed")
 	}
-	maxOpenConCount, err := strconv.Atoi(os.Getenv("DB_CONNECTION_LIFETIME_MINUTE"))
-	if err == nil {
-		fmt.Println("Configuration DB Failed")
+	maxOpenConCount, err := strconv.Atoi(os.Getenv("DB_MAX_OPEN_CONNECTION_COUNT"))
+	if err != nil {
+		fmt.Println("DB_MAX_OPEN_CONNECTION_COUNT Failed")
 	}
 	DB.DB().SetConnMaxLifetime(time.Duration(maxConLifeTime) * time.Minute)
 	DB.DB().SetMaxIdleConns(maxIdleCount)

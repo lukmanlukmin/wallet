@@ -6,24 +6,26 @@ import (
 	dbEntity "github.com/lukmanlukmin/wallet/entity/database"
 	httpResponseEntity "github.com/lukmanlukmin/wallet/entity/http/response"
 	repository "github.com/lukmanlukmin/wallet/repository/database"
+	helper "github.com/lukmanlukmin/wallet/util/helper"
 )
 
-type UserService struct {
+type AuthService struct {
 	userRepository repository.UserRepositoryInterface
 }
 
-func UserServiceHandler() *UserService {
-	return &UserService{
+func AuthServiceHandler() *AuthService {
+	return &AuthService{
 		userRepository: repository.UserRepositoryHandler(),
 	}
 }
 
-type UserServiceInterface interface {
+type AuthServiceInterface interface {
 	GetUserByID(id int) (*httpResponseEntity.UserResponse, error)
 	Login(email string, password string) (*httpResponseEntity.LoginResponse, error)
+	Logout(ID int) error
 }
 
-func (service *UserService) GetUserByID(id int) (*httpResponseEntity.UserResponse, error) {
+func (service *AuthService) GetUserByID(id int) (*httpResponseEntity.UserResponse, error) {
 	userData := &dbEntity.User{}
 	err := service.userRepository.GetUserByID(id, userData)
 	result := &httpResponseEntity.UserResponse{}
@@ -34,10 +36,28 @@ func (service *UserService) GetUserByID(id int) (*httpResponseEntity.UserRespons
 	return result, err
 }
 
-func (service *UserService) Login(email string, password string) (*httpResponseEntity.LoginResponse, error) {
+func (service *AuthService) Login(email string, password string) (*httpResponseEntity.LoginResponse, error) {
 	userData := &dbEntity.User{}
-	err := service.userRepository.GetUserByEmailPassword(email, password, userData)
-	result := &httpResponseEntity.LoginResponse{}
-	result.Token = fmt.Sprintf("%s-%s", userData.Username, userData.Email)
-	return result, err
+	err := service.userRepository.GetUserByEmail(email, userData)
+	statusPassword := helper.CompareHash(userData.Password, password)
+	if statusPassword == true {
+		fmt.Println("match password")
+	} else {
+		fmt.Println("not match password")
+	}
+	token, err := helper.CreateToken(int(userData.ID), userData.UserType)
+	tokenResult := &httpResponseEntity.LoginResponse{
+		Token: token,
+	}
+	userData.Available = true
+	go service.userRepository.UpdateUser(int(userData.ID), userData)
+	return tokenResult, err
+}
+
+func (service *AuthService) Logout(ID int) error {
+	userData := &dbEntity.User{}
+	err := service.userRepository.GetUserByID(ID, userData)
+	userData.Available = false
+	go service.userRepository.UpdateUser(int(userData.ID), userData)
+	return err
 }

@@ -5,10 +5,12 @@ go 1.14
 require (
 	cloud.google.com/go/spanner v1.5.1 // indirect
 	github.com/ClickHouse/clickhouse-go v1.4.0 // indirect
+	github.com/appleboy/gin-jwt v2.5.0+incompatible
 	github.com/aws/aws-sdk-go v1.30.11 // indirect
 	github.com/cockroachdb/cockroach-go v0.0.0-20200411195601-6f5842749cfc // indirect
 	github.com/cznic/mathutil v0.0.0-20181122101859-297441e03548 // indirect
 	github.com/denisenkom/go-mssqldb v0.0.0-20200206145737-bbfc9a55622e // indirect
+	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/edsrzf/mmap-go v1.0.0 // indirect
 	github.com/gin-gonic/gin v1.6.2
 	github.com/go-sql-driver/mysql v1.5.0
@@ -25,10 +27,11 @@ require (
 	github.com/mattn/go-sqlite3 v2.0.3+incompatible // indirect
 	github.com/nakagami/firebirdsql v0.0.0-20200411233608-28c14dad0691 // indirect
 	github.com/shopspring/decimal v0.0.0-20200419222939-1884f454f8ea // indirect
+	github.com/tidwall/gjson v1.6.0 // indirect
 	github.com/xanzy/go-gitlab v0.31.0 // indirect
 	go.mongodb.org/mongo-driver v1.3.2 // indirect
 	go.uber.org/zap v1.14.1
-	golang.org/x/crypto v0.0.0-20200420201142-3c4aac89819a // indirect
+	golang.org/x/crypto v0.0.0-20200420201142-3c4aac89819a
 	golang.org/x/exp v0.0.0-20200331195152-e8c3332aa8e5 // indirect
 	golang.org/x/net v0.0.0-20200421231249-e086a090c8fd // indirect
 	golang.org/x/sys v0.0.0-20200420163511-1957bb5e6d1f // indirect
@@ -37,5 +40,6 @@ require (
 	google.golang.org/api v0.22.0 // indirect
 	google.golang.org/genproto v0.0.0-20200420144010-e5e8543f8aeb // indirect
 	google.golang.org/grpc v1.29.0 // indirect
+	gopkg.in/dgrijalva/jwt-go.v3 v3.2.0 // indirect
 	modernc.org/ql v1.0.1 // indirect
 )
