@@ -16,6 +16,9 @@ but if we want to run without docker, you need continue follow below instruction
 __Manager__<br>
 this project managed using [go-module](https://blog.golang.org/using-go-modules)
 
+__Setting__<br>
+all server and database connection setting is configured on .env file on this root project
+
 __Database__<br>
 this application will perfectly run with postgreSQL-12
 
